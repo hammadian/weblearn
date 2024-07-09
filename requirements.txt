@@ -1,6 +1,6 @@
 aiohttp>=3.7.4
 appdirs==1.4.4
-asgiref==3.2.3
+asgiref
 async-timeout==3.0.1
 attrs==19.3.0
 bbrest==0.4.8
@@ -31,7 +31,7 @@ pbr==5.4.5
 pendulum==2.1.0
 pycparser==2.19
 pyee==7.0.2
-pyppeteer==0.2.2
+pyppeteer
 pyquery==1.4.1
 python-dateutil==2.8.1
 pytz==2019.3
@@ -47,7 +47,7 @@ sqlparse==0.3.0
 stevedore==2.0.1
 tqdm==4.47.0
 tzlocal==2.1
-urllib3>=1.26.5
+urllib3
 uuid==1.30
 virtualenv==20.0.25
 virtualenv-clone==0.5.4
