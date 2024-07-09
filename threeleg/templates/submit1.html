@@ -3,7 +3,15 @@
 {% block content %}
   <h1>Submit assignment</h1>
   <!--choose file to submit-->
+  <form action="/submit1_step2" method="post" enctype="multipart/form-data">
+    <label for="file">Choose file to submit:</label>
+    <input type="file" name="studentFile" id="studentFile">
+  </br>
   <!--choose original assignment to generate question-->
+    <label for="file">Choose original assignment:</label>
+    <input type="file" name="instructorFile" id="instructorFile">
+    </br>
+    <input type="submit" value="Submit">
   <!--contact chatgpt to generate a question based on the assignment specs-->
   <!---->
   <!---->

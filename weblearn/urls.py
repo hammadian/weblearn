@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-# Use include() to add paths from the twoleg application 
+# Use include() to add paths from the twoleg application
 from django.urls import include
 
 urlpatterns += [
@@ -29,6 +29,10 @@ urlpatterns += [
 
 urlpatterns += [
     path('threeleg/', include('threeleg.urls')),
+]
+
+urlpatterns += [
+    path('submit1/', include('threeleg.urls')),
 ]
 
 #Add URL maps to redirect the base URL, /, to our twoleg application

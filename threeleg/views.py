@@ -16,7 +16,7 @@ def threeindex(request):
 
     # The following gets/stores the object to access Learn in the user's session.
     # This is key for 3LO web applications so that when you use the app, your
-    # session has your object for accessing 
+    # session has your object for accessing
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
     resp = bb.GetVersion()
     version_json = resp.json()
@@ -41,8 +41,8 @@ def whoami(request):
         # The following does maintain the https: scheme if that was used with the incomming request.
         # BUT because I'm terminating the tls at the ngrok server, my incomming request is http.
         # Hence the redirect to get_auth_code is http in development. But we want our redirect_uri to be
-        # have a scheme of https so that the Learn server can redirect back through ngrok with our 
-        # secure SSL cert. We'll have to build a redirect_uri with the https scheme in the 
+        # have a scheme of https so that the Learn server can redirect back through ngrok with our
+        # secure SSL cert. We'll have to build a redirect_uri with the https scheme in the
         # get_auth_code function.
         return HttpResponseRedirect(reverse('get_auth_code'))
     else:
@@ -66,6 +66,44 @@ def whoami(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'whoami.html', context=context)
 
+def submit1(request):
+    """View function for submit1 page of site."""
+    bb_json = request.session.get('bb_json')
+    if (bb_json is None):
+        bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
+        bb_json = jsonpickle.encode(bb)
+        print('pickled BbRest putting it on session')
+        request.session['bb_json'] = bb_json
+        request.session['target_view'] = 'whoami' # So after we have the access token we know to come back here.
+        # The following does maintain the https: scheme if that was used with the incomming request.
+        # BUT because I'm terminating the tls at the ngrok server, my incomming request is http.
+        # Hence the redirect to get_auth_code is http in development. But we want our redirect_uri to be
+        # have a scheme of https so that the Learn server can redirect back through ngrok with our
+        # secure SSL cert. We'll have to build a redirect_uri with the https scheme in the
+        # get_auth_code function.
+        return HttpResponseRedirect(reverse('get_auth_code'))
+    else:
+        print('got BbRest from session')
+        bb = jsonpickle.decode(bb_json)
+        if bb.is_expired():
+            print('expired token')
+            request.session['bb_json'] = None
+            submit1(request)
+        bb.supported_functions() # This and the following are required after
+        bb.method_generator()    # unpickling the pickled object.
+        print(f'expiration: {bb.expiration()}')
+
+    # resp = bb.call('GetUser', userId = "me", sync=True ) #Need BbRest to support "me"
+    # user_json = resp.json()
+    # context = {
+    #     'user_json': user_json,
+    #     'access_token': bb.token_info['access_token']
+    # }
+    context={}
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'submit1.html', context=context)
+
+
 def courses(request):
     """View function for courses page of site."""
     bb_json = request.session.get('bb_json')
@@ -87,7 +125,7 @@ def courses(request):
         bb.method_generator()    # unpickling the pickled object.
         print(f'expiration: {bb.expiration()}')
 
-    resp = bb.call('GetCourses', sync=True ) 
+    resp = bb.call('GetCourses', sync=True )
     courses_json = resp.json()
     context = {
         'courses_json': courses_json,
@@ -105,8 +143,8 @@ def get_auth_code(request):
     print('got BbRest from session')
     bb = jsonpickle.decode(bb_json)
     bb.supported_functions() # This and the following are required after
-    bb.method_generator()    # unpickling the pickled object. 
-    # The following gives the path to the resource on the server where we are running, 
+    bb.method_generator()    # unpickling the pickled object.
+    # The following gives the path to the resource on the server where we are running,
     # but not the protocol or host FQDN. We need to prepend those to get an absolute redirect uri.
     redirect_uri = reverse(get_access_token)
     absolute_redirect_uri = f"https://{request.get_host()}{redirect_uri}"
