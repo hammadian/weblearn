@@ -52,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'weblearn.urls'
-
+OPENAI_API_KEY='sk-proj-es6Y18ICodfvs8l9krNvT3BlbkFJ6rsTcyibEIpY0HCYsgDT'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -68,6 +68,9 @@ TEMPLATES = [
         },
     },
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 WSGI_APPLICATION = 'weblearn.wsgi.application'
 

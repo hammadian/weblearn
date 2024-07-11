@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.threeindex, name='threeindex'),
     path('whoami', views.whoami, name='whoami'),
     path('submit1', views.submit1, name='submit1'),
+    path('submit1_step2', views.submit1_step2, name='submit1_step2'),
     path('courses', views.courses, name='courses'),
     path('get_auth_code', views.get_auth_code, name='get_auth_code'),
     path('get_access_token', views.get_access_token, name='get_access_token')

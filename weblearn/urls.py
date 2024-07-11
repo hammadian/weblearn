@@ -35,6 +35,10 @@ urlpatterns += [
     path('submit1/', include('threeleg.urls')),
 ]
 
+urlpatterns += [
+    path('submit1_step2/', include('threeleg.urls')),
+]
+
 #Add URL maps to redirect the base URL, /, to our twoleg application
 from django.views.generic import RedirectView
 urlpatterns += [

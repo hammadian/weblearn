@@ -104,6 +104,44 @@ def submit1(request):
     return render(request, 'submit1.html', context=context)
 
 
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import os
+from datetime import datetime
+import openai
+
+@csrf_exempt  # Only for testing; remove or replace with proper CSRF handling in production
+def submit1_step2(request):
+    if request.method == 'POST':
+        # Process the files and form data here
+        student_file = request.FILES['studentFile']
+        instructor_file = request.FILES['instructorFile']
+        # Add your file processing logic here
+        # save files to disk, process them, etc.
+                # Generate a timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                # Append timestamp to file names
+        student_file_name = f"{timestamp}_{student_file.name}"
+        instructor_file_name = f"{timestamp}_{instructor_file.name}"
+          # Generate paths within MEDIA_ROOT to save the files
+        student_file_path = os.path.join(settings.MEDIA_ROOT, 'uploads/student_files', student_file_name)
+        instructor_file_path = os.path.join(settings.MEDIA_ROOT, 'uploads/instructor_files', instructor_file_name)
+
+
+        with open(student_file_path, 'wb') as student_file1:
+            for chunk in student_file.chunks():
+                student_file1.write(chunk)
+
+        with open(instructor_file_path, 'wb') as instructor_file1:
+            for chunk in instructor_file.chunks():
+                instructor_file1.write(chunk)
+
+        return HttpResponse("Files uploaded successfully.")
+    else:
+        return HttpResponse("This route only handles POST requests.")
+
+
 def courses(request):
     """View function for courses page of site."""
     bb_json = request.session.get('bb_json')
